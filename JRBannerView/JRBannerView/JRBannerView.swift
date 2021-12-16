@@ -65,7 +65,8 @@ extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlow
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        config.didSelectItem?(collectionView, indexPath, dataSource[indexPath.row])
+        let row = config.isRepeat ? indexPath.row % dataSource.count : indexPath.row
+        config.didSelectItem?(collectionView, indexPath, dataSource[row])
     }
     
     // MARK: - - - UIScrollViewDelegate

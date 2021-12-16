@@ -33,6 +33,9 @@ class ViewController: UIViewController {
                 cell.model = model
                 return cell
             }
+            .setDidSelectedItem(by: { collectionView, indexPath, model in
+                
+            })
         bannerView = JRBannerView(config: config)
         view.addSubview(bannerView)
         
