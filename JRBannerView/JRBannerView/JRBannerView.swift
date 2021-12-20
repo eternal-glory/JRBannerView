@@ -43,9 +43,11 @@ class JRBannerView: UIView {
         _collectionView.backgroundColor = .clear
         _collectionView.delegate = self
         _collectionView.dataSource = self
-        guard let spaceName = Bundle.main.infoDictionary!["CFBundleExecutable"] as? String,
-              let cellClass = NSClassFromString(spaceName + "." + config.identifier) as? UICollectionViewCell.Type
-        else {
+        guard var spaceName = Bundle.main.infoDictionary?["CFBundleExecutable"] as? String else {
+            return _collectionView
+        }
+        spaceName = spaceName.replacingOccurrences(of: "-", with: "_")
+        guard let cellClass = NSClassFromString(spaceName + "." + config.identifier) as? UICollectionViewCell.Type else {
             return _collectionView
         }
         _collectionView.register(cellClass, forCellWithReuseIdentifier: config.identifier)
