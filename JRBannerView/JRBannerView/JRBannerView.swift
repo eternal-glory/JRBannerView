@@ -9,17 +9,17 @@ import UIKit
 
 let kBannerCount = 500
 
-class JRBannerView: UIView {
+class JRBannerView<T: Codable>: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private var dataSource: [Any] = []
     
     private var beganDragging: Bool = false
     
-    private var config: JRBannerConfig
+    private var config: JRBannerConfig<T>
     
     private var timer: Timer?
     
-    init(config: JRBannerConfig = .init()) {
+    init(config: JRBannerConfig<T> = .init()) {
         self.config = config
         super.init(frame: config.frame)
         
@@ -53,9 +53,9 @@ class JRBannerView: UIView {
         _collectionView.register(cellClass, forCellWithReuseIdentifier: config.identifier)
         return _collectionView
     }()
-}
-
-extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+//}
+//
+//extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return config.isRepeat ? dataSource.count * kBannerCount : dataSource.count
@@ -63,12 +63,12 @@ extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlow
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = config.isRepeat ? indexPath.row % dataSource.count : indexPath.row
-        return config.collectionViewCell?(collectionView, IndexPath(row: row, section: 0), dataSource[row]) ?? UICollectionViewCell()
+        return config.collectionViewCell?(collectionView, IndexPath(row: row, section: 0), config.dataSource[row]) ?? UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = config.isRepeat ? indexPath.row % dataSource.count : indexPath.row
-        config.didSelectItem?(collectionView, indexPath, dataSource[row])
+        config.didSelectItem?(collectionView, indexPath, config.dataSource[row])
     }
     
     // MARK: - - - UIScrollViewDelegate
@@ -102,41 +102,7 @@ extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlow
             
         }
     }
-    
-}
 
-extension JRBannerView {
-
-    private func setupView() {
-        addSubview(collectionView)
-        collectionView.isScrollEnabled = config.isScrollEnabled
-        collectionView.isPagingEnabled = config.itemSize.width == collectionView.frame.size.width && config.lineSpacing == 0
-        
-        resetCollection()
-    }
-    
-    private func resetCollection() {
-        UIView.animate(withDuration: 0.1) { [self] in
-            collectionView.reloadData()
-            
-            let row = config.isRepeat ? kBannerCount / 2 * dataSource.count + config.selectIndex : config.selectIndex
-            let indexPath = IndexPath.init(row: row, section: 0)
-            scroll(to: indexPath, animated: false)
-            
-            config.currentIndex = row
-            if config.isAuto {
-                createTimer()
-            } else {
-                cancelTimer()
-            }
-        }
-    }
-    
-    func reloadView() {
-        dataSource = config.dataSource
-        resetCollection()
-    }
-    
     private func createTimer() {
         cancelTimer()
         
@@ -170,6 +136,38 @@ extension JRBannerView {
         }
         let indexPath = IndexPath(row: config.currentIndex, section: 0)
         scroll(to: indexPath, animated: true)
+    }    
+}
+
+extension JRBannerView {
+
+    private func setupView() {
+        addSubview(collectionView)
+        collectionView.isScrollEnabled = config.isScrollEnabled
+        collectionView.isPagingEnabled = config.itemSize.width == collectionView.frame.size.width && config.lineSpacing == 0
+        resetCollection()
+    }
+    
+    private func resetCollection() {
+        UIView.animate(withDuration: 0.1) { [self] in
+            collectionView.reloadData()
+            
+            let row = config.isRepeat ? kBannerCount / 2 * dataSource.count + config.selectIndex : config.selectIndex
+            let indexPath = IndexPath.init(row: row, section: 0)
+            scroll(to: indexPath, animated: false)
+            
+            config.currentIndex = row
+            if config.isAuto {
+                createTimer()
+            } else {
+                cancelTimer()
+            }
+        }
+    }
+    
+    func reloadView() {
+        dataSource = config.dataSource
+        resetCollection()
     }
 }
 

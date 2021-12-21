@@ -13,13 +13,13 @@ enum JRBanneRaroundCellPosition {
     case bottom
 }
 
-class JRBannerConfig: NSObject {
+class JRBannerConfig<T: Codable>: NSObject {
     
     /// bannerView位置大小
     private(set) var frame: CGRect = .zero
     
     /// 数据源
-    private(set) var dataSource: [Any] = []
+    private(set) var dataSource: [T] = []
     
     /// 是否允许手势滑动
     private(set) var isScrollEnabled: Bool = true
@@ -71,9 +71,9 @@ class JRBannerConfig: NSObject {
     /// 左右两边item透明度
     private(set) var orSoCellAlpha: CGFloat = 1
     
-    private(set) var collectionViewCell: ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: Any)-> UICollectionViewCell)?
+    private(set) var collectionViewCell: ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: T)-> UICollectionViewCell)?
     
-    private(set) var didSelectItem: ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: Any)->())?
+    private(set) var didSelectItem: ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: T)->())?
     
     /// 当前位置
     var currentIndex: Int = 0
@@ -92,7 +92,7 @@ extension JRBannerConfig {
     /// 配置数据源
     /// - Parameter dataSource: 数组
     /// - Returns: Self
-    func setDataSource(by dataSource: [Any]) -> Self {
+    func setDataSource(by dataSource: [T]) -> Self {
         self.dataSource = dataSource
         return self
     }
@@ -233,7 +233,7 @@ extension JRBannerConfig {
     /// 初始化collectionCell
     /// - Parameter collectionViewCell: 需要返回collectionViewCell的闭包
     /// - Returns: Self
-    func setCollectionViewCell(by collectionViewCell: @escaping ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: Any)-> UICollectionViewCell)) -> Self {
+    func setCollectionViewCell(by collectionViewCell: @escaping ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: T)-> UICollectionViewCell)) -> Self {
         self.collectionViewCell = collectionViewCell
         return self
     }
@@ -241,7 +241,7 @@ extension JRBannerConfig {
     /// 点击collectionCell
     /// - Parameter didSelectItem: collectionCell的闭包
     /// - Returns: Self
-    func setDidSelectedItem(by didSelectItem: @escaping ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: Any)->Void)) -> Self {
+    func setDidSelectedItem(by didSelectItem: @escaping ((_ collectionView: UICollectionView, _ indexPath: IndexPath, _ model: T)->Void)) -> Self {
         self.didSelectItem = didSelectItem
         return self
     }

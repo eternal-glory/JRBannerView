@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+
 class CustomCollectionViewCell: UICollectionViewCell {
     
     static var identifier: String { "\(self)" }
@@ -16,12 +17,12 @@ class CustomCollectionViewCell: UICollectionViewCell {
         return cell
     }
     
-    var model: Any? {
+    var model: Model? {
         didSet {
-            guard let model = model as? String else {
+            guard let model = model else {
                 return
             }
-            imageViem.kf.setImage(with: URL(string: model))
+            imageViem.kf.setImage(with: URL(string: model.image))
         }
     }
     

@@ -7,11 +7,11 @@
 
 import UIKit
 
-class JRBannerCollectionViewFlowLayout: UICollectionViewFlowLayout {
+class JRBannerCollectionViewFlowLayout<T: Codable>: UICollectionViewFlowLayout {
     
-    private var config: JRBannerConfig
+    private var config: JRBannerConfig<T>
     
-    init(config: JRBannerConfig) {
+    init(config: JRBannerConfig<T>) {
         self.config = config
         super.init()
     }
