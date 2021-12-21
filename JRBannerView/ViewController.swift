@@ -24,7 +24,7 @@ class ViewController: UIViewController {
             let m1 = Model(image:"http://dmimg.5054399.com/allimg/optuji/qbanop/38.jpg")
             let m2 = Model(image:"http://gss0.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/09fa513d269759ee1100528cb2fb43166d22df20.jpg")
 
-            let _ = self.config.setDataSource(by: [ m, m1, m2 ])
+            self.config.setDataSource(by: [ m, m1, m2 ])
             self.bannerView.reloadView()
         }
     }

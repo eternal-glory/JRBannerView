@@ -92,9 +92,8 @@ extension JRBannerConfig {
     /// 配置数据源
     /// - Parameter dataSource: 数组
     /// - Returns: Self
-    func setDataSource(by dataSource: [T]) -> Self {
+    func setDataSource(by dataSource: [T]) {
         self.dataSource = dataSource
-        return self
     }
     
     /// 是否垂直
