@@ -11,7 +11,7 @@ let kBannerCount = 500
 
 class JRBannerView<T: Codable>: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    private var dataSource: [Any] = []
+    private var dataSource: [T] = []
     
     private var beganDragging: Bool = false
     
@@ -53,9 +53,6 @@ class JRBannerView<T: Codable>: UIView, UICollectionViewDataSource, UICollection
         _collectionView.register(cellClass, forCellWithReuseIdentifier: config.identifier)
         return _collectionView
     }()
-//}
-//
-//extension JRBannerView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return config.isRepeat ? dataSource.count * kBannerCount : dataSource.count
@@ -63,12 +60,12 @@ class JRBannerView<T: Codable>: UIView, UICollectionViewDataSource, UICollection
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let row = config.isRepeat ? indexPath.row % dataSource.count : indexPath.row
-        return config.collectionViewCell?(collectionView, IndexPath(row: row, section: 0), config.dataSource[row]) ?? UICollectionViewCell()
+        return config.collectionViewCell?(collectionView, IndexPath(row: row, section: 0), dataSource[row]) ?? UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let row = config.isRepeat ? indexPath.row % dataSource.count : indexPath.row
-        config.didSelectItem?(collectionView, indexPath, config.dataSource[row])
+        config.didSelectItem?(collectionView, indexPath, dataSource[row])
     }
     
     // MARK: - - - UIScrollViewDelegate
